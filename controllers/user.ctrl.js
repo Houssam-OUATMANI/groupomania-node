@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken')
 
 const userValidation = require('../validation/user.validation')
 const User = require('../models/users')
-const { use } = require('../routes/user.routes')
 
 
 // INSCRIPTION UTILISATEUR
@@ -57,4 +56,35 @@ exports.login = ((req ,res)=> {
          .catch(err => res.status(500).json({err}))
     })
     .catch(err => res.status(500).json({err}))
+})
+
+
+// SUPPRESSION COMPTE
+
+exports.deleteAccount = ((req , res)=>{
+    const {email , password} = req.body
+
+    const { error } = userValidation(req.body)
+    if (error) return res.status(400).json({ error : error.details[0].message})
+
+    User.findOne({where : {email :email}})
+    .then(user => {
+        if(!user)return res.status(401).json({message : "Unauthorized"})
+
+          // mdp du form est-il pareil que celui dans la db ?
+          bcrypt.compare(password, user.password)
+          .then(match =>  {
+            if (!match) return res.status(401).json({ err: 'Mot de passe incorrect !' })
+
+            user.destroy().then((result)=>{
+               res.status(200).json(result)
+            })
+          })
+            // err bcrypt
+         .catch(err => res.status(500).json({err}))
+
+
+    })
+    .catch(err => res.status(500).json(err))
+
 })
