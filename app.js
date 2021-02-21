@@ -7,11 +7,15 @@ const app = express()
 
 const userRoutes = require('./routes/user.routes')
 const postRoutes = require('./routes/posts.routes')
+const postComments = require('./routes/comments.routes')
+
 
 const database = require('./config/database')
 
 const UserModel = require('./models/users')
 const PostModel = require('./models/posts')
+const CommentModel = require('./models/comment')
+
 
 
 app.use(cors())
@@ -21,21 +25,27 @@ app.use(express.static('./public'))
 // middleware user
 
 app.use((req, res, next)=>{
-    UserModel.findByPk(1)
-    .then(user =>{
-        req.user = user
+    // UserModel.findByPk(1)
+    // .then(user =>{
+    //     req.user = user
         next()
-    })
-    .catch(err => console.log(err))
+    // })
+    // .catch(err => console.log(err))
+    console.log(req.body)
 })
 
 app.use('/api/auth',userRoutes)
-app.use('/api/auth',postRoutes)
+app.use('/api/posts',postRoutes)
+app.use('/api/comments',postComments)
 
 
 
 
-PostModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'} )
+
+PostModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'})
+CommentModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'})
+CommentModel.belongsTo(PostModel, {constraints : true , onDelete : 'CASCADE'})
+
 
 database.sync()
 .then(()=>{

@@ -23,9 +23,9 @@ exports.signup = ((req ,res)=> {
             password: hash
         })
         .then(()=> res.status(201).json({message : "User created!"}))
-        .catch(err => res.status(400).json({err}))
+        .catch(err => res.status(400).json({message : err}))
     })
-    .catch(err => res.status(500).json({err}))
+    .catch(err => res.status(500).json({message : err}))
 })
 
 
@@ -34,7 +34,7 @@ exports.login = ((req ,res)=> {
     const {email , password} = req.body
 
     const {error} = userValidation(req.body)
-    if (error) return res.status(400).json({ error : error.details[0].message})
+    if (error) return res.status(400).json({ message : error.details[0].message})
 
     // user est dans la db ?
     User.findOne({ where : {email : email}})
@@ -53,9 +53,9 @@ exports.login = ((req ,res)=> {
              })
         })
          // err bcrypt
-         .catch(err => res.status(500).json({err}))
+         .catch(err => res.status(500).json({message : err}))
     })
-    .catch(err => res.status(500).json({err}))
+    .catch(err => res.status(500).json({message : err}))
 })
 
 
