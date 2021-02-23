@@ -31,7 +31,7 @@ app.use((req, res, next)=>{
         next()
     // })
     // .catch(err => console.log(err))
-    console.log(req.body)
+   // console.log(req.body)
 })
 
 app.use('/api/auth',userRoutes)
