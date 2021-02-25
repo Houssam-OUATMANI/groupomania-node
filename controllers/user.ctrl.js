@@ -7,20 +7,22 @@ const User = require('../models/users')
 
 // INSCRIPTION UTILISATEUR
 exports.signup = ((req ,res)=> {
-    const { password, email, username } = req.body
+    const {protocol , file, body } = req
+    console.log(req.body)
 
     // Validation Server
-    const {error} = userValidation(req.body)
+    const {error} = userValidation(body)
     if (error) return res.status(400).json({ error : error.details[0].message})
 
     // Hash
-    bcrypt.hash(password, 12)
+    bcrypt.hash(body.password, 12)
     .then(hash =>{
         // creation & sauvegarde DB
         User.create({
-            username : username,
-            email : email,
-            password: hash
+            username : body.username,
+            email : body.email,
+            password: hash,
+            imageUrl : `${protocol}://${req.get('host')}/public/image/${file.filename}`
         })
         .then(()=> res.status(201).json({message : "User created!"}))
         .catch(err => res.status(400).json({message : err}))
@@ -58,6 +60,30 @@ exports.login = ((req ,res)=> {
     .catch(err => res.status(500).json({message : err}))
 })
 
+
+
+
+
+// Info Compte user
+
+exports.getUserInfo = (req, res) =>{
+    const { id } = req.params
+
+    User.findByPk(id, {
+        attributes : {exclude : ['id', 'password']}
+    })
+    .then((user)=>{
+        res.status(200).json(user)
+    })
+    .catch(error => res.status(500).json(error))
+}
+
+
+exports.updateUserInfo = (req, res)=>{
+    const { id } = req.params
+
+    console.log(id)
+}
 
 // SUPPRESSION COMPTE
 

@@ -1,4 +1,5 @@
 const express = require('express') 
+const path = require('path')
 const cors = require('cors')
 require('dotenv').config()
 const { PORT } = process.env
@@ -19,20 +20,10 @@ const CommentModel = require('./models/comment')
 
 
 app.use(cors())
+app.use('/public/image',express.static('public/image'))
 app.use(express.json())
-app.use(express.static('./public'))
 
-// middleware user
-
-app.use((req, res, next)=>{
-    // UserModel.findByPk(1)
-    // .then(user =>{
-    //     req.user = user
-        next()
-    // })
-    // .catch(err => console.log(err))
-   // console.log(req.body)
-})
+// middleware use
 
 app.use('/api/auth',userRoutes)
 app.use('/api/posts',postRoutes)
