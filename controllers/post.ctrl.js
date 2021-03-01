@@ -1,5 +1,8 @@
 
 const Post = require('../models/posts')
+const User = require('../models/users')
+const Comment = require('../models/comment')
+
 
 exports.addPost = ((req,res)=>{
       const {protocol , file, body } = req
@@ -7,8 +10,8 @@ exports.addPost = ((req,res)=>{
       Post.create({
             title : body.title,
             detail : body.detail,
-            imageUrl : `${protocol}://${req.get('host')}/public/image/${file.filename}`
-           // userId : req.user.id
+            imageUrl : `${protocol}://${req.get('host')}/public/image/${file.filename}`,
+            userId : body.userId
       })
       .then((result)=>{
             res.status(200).json(result)
@@ -19,20 +22,31 @@ exports.addPost = ((req,res)=>{
 
 exports.getAllPosts = ((req, res)=>{
 
-      Post.findAll()
+      Post.findAll({
+            include :[
+                        {model :User, attributes: {exclude: ['id', 'email', 'password', 'createdAt', 'updatedAt']}},
+                        {model: Comment, include : [User] }
+                        //{model : Comment}
+                  ]
+            }
+            )
       .then(response =>{
+            
            console.log(response) 
             res.status(200).json(response)
 
       })
-      .catch(err => res.status(500).json({message : err}))
-})
+      .catch(err => {
+            console.log(err)
+            res.status(500).json({message : err})
+      }
+)})
 
 
 exports.getAllMyPosts = (req, res)=>{
      const userId = req.params.id
      console.log(userId)
-      Post.findAll({ where : { userId : userId }})
+      Post.findAll({ where : { userId : userId }, include : [{model : User , attributes : { exclude : ['id','email', 'password', 'createdAt', 'updatedAt' ]}}]})
       .then(posts =>{
             res.json(posts)
       })

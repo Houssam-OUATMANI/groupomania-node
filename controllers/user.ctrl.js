@@ -51,7 +51,7 @@ exports.login = ((req ,res)=> {
         //     //tout est ok
              res.status(200).json({
                  userId : user.id,
-                 token : jwt.sign({  userId : user.id}, 'SECRET_KEY', {expiresIn : "5h"})
+                 token : jwt.sign({  userId : user.id, email : user.email}, 'SECRET_KEY', {expiresIn : "5h"})
              })
         })
          // err bcrypt
@@ -59,8 +59,6 @@ exports.login = ((req ,res)=> {
     })
     .catch(err => res.status(500).json({message : err}))
 })
-
-
 
 
 
@@ -88,15 +86,16 @@ exports.updateUserInfo = (req, res)=>{
 // SUPPRESSION COMPTE
 
 exports.deleteAccount = ((req , res)=>{
-    const {email , password} = req.body
-
+    const { password } = req.body
+    const {  id } = req.params
+    console.log(req.body)
     const { error } = userValidation(req.body)
     if (error) return res.status(400).json({ error : error.details[0].message})
 
-    User.findOne({where : {email :email}})
+    User.findOne({where : {id : id}})
     .then(user => {
         if(!user)return res.status(401).json({message : "Unauthorized"})
-
+        console.log("USER :",user)
           // mdp du form est-il pareil que celui dans la db ?
           bcrypt.compare(password, user.password)
           .then(match =>  {
@@ -112,5 +111,7 @@ exports.deleteAccount = ((req , res)=>{
 
     })
     .catch(err => res.status(500).json(err))
+
+    res.json({message : "salurt"})
 
 })

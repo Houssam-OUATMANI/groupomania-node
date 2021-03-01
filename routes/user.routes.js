@@ -4,6 +4,7 @@ const { Router } = require('express')
 const router = Router()
 
 const multer = require('../middleware/multer')
+const auth = require('../middleware/authentification')
 const { login, signup, deleteAccount, getUserInfo, updateUserInfo} = require('../controllers/user.ctrl')
 
 
@@ -11,10 +12,12 @@ router.post('/signup', multer, signup)
 
 router.post('/login', login)
 
-router.get('/user-info/:id', getUserInfo )
+router.get('/user-info/:id',auth, getUserInfo )
 
-router.put('/update-user/:id',multer, updateUserInfo )
+router.put('/update-user/:id' ,auth,multer, updateUserInfo )
 
-router.delete('/delete-account/:id', deleteAccount)
+router.post('/delete-account/:id' ,auth , deleteAccount)
+//router.get('/delete-account/:id'  , deleteAccount)
+
 
 module.exports = router

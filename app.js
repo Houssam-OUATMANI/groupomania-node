@@ -16,6 +16,8 @@ const database = require('./config/database')
 const UserModel = require('./models/users')
 const PostModel = require('./models/posts')
 const CommentModel = require('./models/comment')
+const PostLikes = require('./models/post.likes')
+
 
 
 
@@ -34,11 +36,20 @@ app.use('/api/comments',postComments)
 
 
 PostModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'})
-CommentModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'})
-CommentModel.belongsTo(PostModel, {constraints : true , onDelete : 'CASCADE'})
+//CommentModel.belongsTo(PostModel)
+PostModel.hasMany(CommentModel)
+CommentModel.belongsTo(UserModel)
+//PostModel.hasMany(CommentModel, {constraints : true, onDelete : 'CASCADE'})
+UserModel.hasMany(CommentModel, {constraints : true, onDelete : 'CASCADE'})
+
+// Likes Associations
+
+PostLikes.belongsTo(PostModel)
+UserModel.hasMany(PostLikes)
 
 
-database.sync()
+
+database.sync({force : true})
 .then(()=>{
     console.log('Database reached ...')
     app.listen(PORT || 5000 , () => PORT ? console.log(`PORT SERVER ${PORT}`) : console.log("SERVER PORT 5000"))

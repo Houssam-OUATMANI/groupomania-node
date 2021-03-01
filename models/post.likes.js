@@ -3,17 +3,16 @@ const sequelize = require('../config/database')
 
 
 
-const Comment =  sequelize.define('comment', {
+const postLikes =  sequelize.define('postLikes', {
       id : {
           type : DataTypes.INTEGER.UNSIGNED,
           primaryKey : true,
           autoIncrement :true,
           allowNull : false
       },
-      comment : {
-            type : DataTypes.STRING
+      likes : {
+          type : DataTypes.INTEGER.UNSIGNED,
       }
 })
 
-
-module.exports = Comment
+module.exports = postLikes
