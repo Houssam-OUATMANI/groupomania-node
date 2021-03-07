@@ -21,15 +21,15 @@ exports.addPost = ((req,res)=>{
 
 
 exports.getAllPosts = ((req, res)=>{
-
       Post.findAll({
             include :[
-                        {model :User, attributes: {exclude: ['id', 'email', 'password', 'createdAt', 'updatedAt']}},
-                        {model: Comment, include : [User] }
-                        //{model : Comment}
-                  ]
-            }
-            )
+                  {model :User, attributes: {exclude: ['id', 'email', 'password', 'createdAt', 'updatedAt']}},
+                  {model: Comment, include : [User] }
+                  //{model : Comment}
+            ],
+            order:[ ['createdAt', 'DESC'] ,[Comment,'createdAt', 'DESC' ] ]
+      }
+      )
       .then(response =>{
             
            console.log(response) 
@@ -61,7 +61,9 @@ exports.updatePost = (req, res)=>{
 
 
 exports.deletePost = (req, res)=>{
-      const {id} = req.params
-     res.json({message : id})
-     console.log(id)
+   const {id} = req.params
+   
+   Post.destroy({where : {id : id }})
+   .then(()=> res.status(200).json({message : "Publication suprimée"}))
+   .catch(error => res.status(500).json(error))
 }

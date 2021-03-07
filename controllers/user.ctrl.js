@@ -79,39 +79,59 @@ exports.getUserInfo = (req, res) =>{
 
 exports.updateUserInfo = (req, res)=>{
     const { id } = req.params
+    const { protocol, body, file} = req
 
-    console.log(id)
+    console.log(body , "eazeazeza")
+    
+   if(file){
+       User.findByPk(id)
+       .then(user =>{
+           user.imageUrl = `${protocol}://${req.get('host')}/public/image/${file.filename}`
+           user.save()
+           .then(()=> res.status(200).json({message : "Image Updated"}))
+           .catch(error => res.status(500).json(error))
+       })
+   }
+   else if (!file){
+       if(body.email){
+           console.log(body.email)
+            User.findByPk(id)
+            .then(user =>{
+                user.email = body.email
+                user.save()
+                .then(()=> res.status(200).json({message : "Email Updated"}))
+                .catch(error => res.status(500).json(error))
+            })
+       }
+       else if(body.username){
+        User.findByPk(id)
+        .then(user =>{
+            user.username = body.username
+            user.save()
+            .then(()=> res.status(200).json({message : "Username Updated"}))
+            .catch(error => res.status(500).json(error))
+        })
+       }
+       else{
+           res.status(401).json({message : "Unauthorized"})
+       }
+   }
+   else{
+    res.status(401).json({message : "Unauthorized"})
+   }  
 }
+
+
 
 // SUPPRESSION COMPTE
 
 exports.deleteAccount = ((req , res)=>{
-    const { password } = req.body
-    const {  id } = req.params
+   
+    const { id } = req.params
     console.log(req.body)
-    const { error } = userValidation(req.body)
-    if (error) return res.status(400).json({ error : error.details[0].message})
-
-    User.findOne({where : {id : id}})
-    .then(user => {
-        if(!user)return res.status(401).json({message : "Unauthorized"})
-        console.log("USER :",user)
-          // mdp du form est-il pareil que celui dans la db ?
-          bcrypt.compare(password, user.password)
-          .then(match =>  {
-            if (!match) return res.status(401).json({ err: 'Mot de passe incorrect !' })
-
-            user.destroy().then((result)=>{
-               res.status(200).json(result)
+            User.destroy({where : {id : id}})
+            .then(()=>{
+               res.status(200).json({message : "Utilisateur suprimée"})
             })
-          })
-            // err bcrypt
-         .catch(err => res.status(500).json({err}))
-
-
-    })
-    .catch(err => res.status(500).json(err))
-
-    res.json({message : "salurt"})
-
+            .catch(err => res.status(500).json(err))
 })

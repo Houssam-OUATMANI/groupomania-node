@@ -14,9 +14,9 @@ router.post('/login', login)
 
 router.get('/user-info/:id',auth, getUserInfo )
 
-router.put('/update-user/:id' ,auth,multer, updateUserInfo )
+router.put('/update-user/:id' , multer, updateUserInfo )
 
-router.post('/delete-account/:id' ,auth , deleteAccount)
+router.delete('/delete-account/:id' ,auth , deleteAccount)
 //router.get('/delete-account/:id'  , deleteAccount)
 
 

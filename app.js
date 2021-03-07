@@ -37,7 +37,7 @@ app.use('/api/comments',postComments)
 
 PostModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'})
 //CommentModel.belongsTo(PostModel)
-PostModel.hasMany(CommentModel)
+PostModel.hasMany(CommentModel, {constraints :true, onDelete : 'CASCADE'})
 CommentModel.belongsTo(UserModel)
 //PostModel.hasMany(CommentModel, {constraints : true, onDelete : 'CASCADE'})
 UserModel.hasMany(CommentModel, {constraints : true, onDelete : 'CASCADE'})
@@ -49,7 +49,7 @@ UserModel.hasMany(PostLikes)
 
 
 
-database.sync({force : true})
+database.sync()
 .then(()=>{
     console.log('Database reached ...')
     app.listen(PORT || 5000 , () => PORT ? console.log(`PORT SERVER ${PORT}`) : console.log("SERVER PORT 5000"))

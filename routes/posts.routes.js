@@ -12,6 +12,6 @@ router.post('/add-post' ,auth,multer, addPost)
 router.get('/all-posts', getAllPosts)
 router.get('/get-my-posts/:id',auth, getAllMyPosts)
 router.put('/update-post/:id',auth, multer, updatePost)
-router.post('/delete-post/:id', auth, deletePost)
+router.delete('/delete-post/:id', auth, deletePost)
 
 module.exports = router
