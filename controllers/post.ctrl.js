@@ -46,7 +46,12 @@ exports.getAllPosts = ((req, res)=>{
 exports.getAllMyPosts = (req, res)=>{
      const userId = req.params.id
      console.log(userId)
-      Post.findAll({ where : { userId : userId }, include : [{model : User , attributes : { exclude : ['id','email', 'password', 'createdAt', 'updatedAt' ]}}]})
+      Post.findAll({ where : { userId : userId }, include : [
+            {model : User , attributes : { exclude : ['id','email', 'password', 'createdAt', 'updatedAt' ]}},
+            {model: Comment, include : [User] }
+      ],
+      order:[ ['createdAt', 'DESC'] ,[Comment,'createdAt', 'DESC' ] ]
+})
       .then(posts =>{
             res.json(posts)
       })
