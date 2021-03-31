@@ -10,6 +10,7 @@ const userRoutes = require('./routes/user.routes')
 const postRoutes = require('./routes/posts.routes')
 const postComments = require('./routes/comments.routes')
 const postLikes = require('./routes/likes.routes')
+const adminRoutes = require('./routes/admin.routes')
 
 
 const database = require('./config/database')
@@ -32,6 +33,7 @@ app.use('/api/auth',userRoutes)
 app.use('/api/posts',postRoutes)
 app.use('/api/comments',postComments)
 app.use('/api/posts/likes', postLikes)
+app.use('/api/admin', adminRoutes)
 
 
 
