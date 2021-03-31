@@ -38,7 +38,7 @@ app.use('/api/posts/likes', postLikes)
 PostModel.belongsTo(UserModel, {constraints : true , onDelete : 'CASCADE'})
 //CommentModel.belongsTo(PostModel)
 PostModel.hasMany(CommentModel, {constraints :true, onDelete : 'CASCADE'})
-CommentModel.belongsTo(UserModel)
+CommentModel.belongsTo(UserModel, {constraints :true, onDelete : 'CASCADE'})
 //PostModel.hasMany(CommentModel, {constraints : true, onDelete : 'CASCADE'})
 UserModel.hasMany(CommentModel, {constraints : true, onDelete : 'CASCADE'})
 
