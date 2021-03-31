@@ -24,7 +24,7 @@ la bdd utilisée est Mysql , faudra avoir Mysql sur sa machine
 
 Penser à crée une schema nommée groupomania
 
-config ORM dur le fichoier ./config/database.js
+config ORM dur le fichier ./config/database.js
 
 schema : "groupomania"
 user : "votre user"
