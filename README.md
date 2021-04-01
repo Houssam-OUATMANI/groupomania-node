@@ -6,13 +6,20 @@
 
 ## npm start : Demarrage du serveur Node
 
+## Port : 5000
+
+## point d'entrée  : app.js
+
+## Version Node : v15.2.0
+
+
 # Technologies :
 
 * Node JS
 * Express
 * MySQL BDD
 * Sequelize ORM
-* Bcrypt  : Chiffrage des mots de passe
+* Bcrypt  : hashage mdp
 * jsonwebtoken  Authentification
 * joi validation données
 * multer gestion des fichiers
@@ -24,7 +31,7 @@ la bdd utilisée est Mysql , faudra avoir Mysql sur sa machine
 
 Penser à crée une schema nommée groupomania
 
-config ORM dur le fichoier ./config/database.js
+config ORM sur le fichier ./config/database.js
 
 schema : "groupomania"
 user : "votre user"
@@ -44,8 +51,8 @@ Pour avoir un accées admin, penser à remplir les champs suivants sur la table 
 * updatedAt : yyyy-mm-dd hh:mm:ss
 
 
-Sur le front :
-
-email : l'email indique sur la bdd
-password : le mdp indiquée sur la bdd
+## Sur le front :
+* Aller sur /admin
+* email : l'email indique sur la bdd
+* password : le mdp indiquée sur la bdd
 
